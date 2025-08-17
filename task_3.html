@@ -3,79 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Basic Calculator by abhishek thakur </title>
+  <title>Calculator</title>
   <style>
     body {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: #f3f3f3;
+      background: #f5f5f5;
       font-family: Arial, sans-serif;
     }
 
     .calculator {
+      width: 300px;
       background: #222;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      overflow: hidden;
     }
 
     .display {
-      background: #000;
-      color: #0f0;
+      background: #111;
+      color: #fff;
       font-size: 2rem;
-      padding: 15px;
-      border-radius: 5px;
-      margin-bottom: 15px;
+      padding: 20px;
       text-align: right;
-      overflow: hidden;
+      border-bottom: 1px solid #444;
     }
 
     .buttons {
       display: grid;
-      grid-template-columns: repeat(4, 70px);
-      grid-gap: 10px;
+      grid-template-columns: repeat(4, 1fr);
     }
 
     button {
       padding: 20px;
       font-size: 1.2rem;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      background: #333;
+      border: 1px solid #333;
+      background: #444;
       color: white;
-      transition: 0.2s;
+      cursor: pointer;
+      transition: background 0.2s;
     }
 
     button:hover {
-      background: #555;
-    }
-
-    .operator {
-      background: #ff9500;
-    }
-
-    .operator:hover {
-      background: #e08900;
+      background: #666;
     }
 
     .equal {
       grid-column: span 2;
-      background: #28a745;
+      background: #ff9500;
     }
 
     .equal:hover {
-      background: #218838;
-    }
-
-    .clear {
-      background: #dc3545;
-    }
-
-    .clear:hover {
-      background: #c82333;
+      background: #e68a00;
     }
   </style>
 </head>
@@ -83,65 +64,62 @@
   <div class="calculator">
     <div class="display" id="display">0</div>
     <div class="buttons">
-      <button class="clear">C</button>
-      <button>/</button>
-      <button>*</button>
-      <button>-</button>
-      <button>7</button>
-      <button>8</button>
-      <button>9</button>
-      <button class="operator">+</button>
-      <button>4</button>
-      <button>5</button>
-      <button>6</button>
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      <button>0</button>
-      <button>.</button>
-      <button class="equal">=</button>
+      <button onclick="clearDisplay()">C</button>
+      <button onclick="deleteLast()">DEL</button>
+      <button onclick="appendValue('%')">%</button>
+      <button onclick="appendValue('/')">÷</button>
+
+      <button onclick="appendValue('7')">7</button>
+      <button onclick="appendValue('8')">8</button>
+      <button onclick="appendValue('9')">9</button>
+      <button onclick="appendValue('*')">×</button>
+
+      <button onclick="appendValue('4')">4</button>
+      <button onclick="appendValue('5')">5</button>
+      <button onclick="appendValue('6')">6</button>
+      <button onclick="appendValue('-')">−</button>
+
+      <button onclick="appendValue('1')">1</button>
+      <button onclick="appendValue('2')">2</button>
+      <button onclick="appendValue('3')">3</button>
+      <button onclick="appendValue('+')">+</button>
+
+      <button onclick="appendValue('0')">0</button>
+      <button onclick="appendValue('.')">.</button>
+      <button class="equal" onclick="calculate()">=</button>
     </div>
   </div>
 
   <script>
-    const display = document.getElementById("display");
-    const buttons = document.querySelectorAll("button");
-    let currentInput = "";
-    let resultDisplayed = false;
+    let display = document.getElementById("display");
 
-    buttons.forEach(button => {
-      button.addEventListener("click", () => {
-        const value = button.textContent;
+    function appendValue(value) {
+      if (display.innerText === "0") {
+        display.innerText = value;
+      } else {
+        display.innerText += value;
+      }
+    }
 
-        if (value === "C") {
-          currentInput = "";
-          display.textContent = "0";
-        } 
-        else if (value === "=") {
-          try {
-            currentInput = eval(currentInput).toString();
-            display.textContent = currentInput;
-            resultDisplayed = true;
-          } catch {
-            display.textContent = "Error";
-            currentInput = "";
-          }
-        } 
-        else {
-          if (resultDisplayed) {
-            if (!isNaN(value)) {
-              currentInput = value;
-            } else {
-              currentInput += value;
-            }
-            resultDisplayed = false;
-          } else {
-            currentInput += value;
-          }
-          display.textContent = currentInput;
-        }
-      });
-    });
+    function clearDisplay() {
+      display.innerText = "0";
+    }
+
+    function deleteLast() {
+      if (display.innerText.length === 1) {
+        display.innerText = "0";
+      } else {
+        display.innerText = display.innerText.slice(0, -1);
+      }
+    }
+
+    function calculate() {
+      try {
+        display.innerText = eval(display.innerText);
+      } catch {
+        display.innerText = "Error";
+      }
+    }
   </script>
 </body>
 </html>
